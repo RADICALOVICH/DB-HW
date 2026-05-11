@@ -1,0 +1,12 @@
+# Raw homework inputs (instructions, source materials)
+inputs/
+
+# OS
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
+
+# Postgres data (если докер маунтит volume в репо)
+pgdata/
