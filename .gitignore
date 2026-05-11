@@ -1,6 +1,9 @@
 # Raw homework inputs (instructions, source materials)
 inputs/
 
+# Personal learning notes (not part of HW submission)
+docs/
+
 # OS
 .DS_Store
 
