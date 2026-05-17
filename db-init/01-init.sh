@@ -14,6 +14,6 @@ create_and_load() {
 }
 
 create_and_load vehicles      01-vehicles
-# create_and_load races         02-races
+create_and_load races         02-races
 # create_and_load hotels        03-hotels
 # create_and_load organization  04-organization

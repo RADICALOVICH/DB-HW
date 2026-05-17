@@ -1,0 +1,37 @@
+-- ПРИМЕЧАНИЕ:
+-- Условие задачи говорит "низкая средняя позиция (больше 3.0)" — это СТРОГО > 3.
+-- Применяем этот строгий порог везде: и в фильтре строк, и в подсчёте low_position_count.
+-- Из-за этого результат отличается от приведённого в задании ожидаемого вывода
+-- по одному значению: для Sedan low_position_count = 1 (а не 2).
+--
+-- В Sedan две машины: BMW 3 Series (avg = 3) и Audi A4 (avg = 8).
+-- При строгом > 3: BMW (3.0 не больше 3.0) не считается → low_position_count = 1.
+-- В ожидаемом выводе ДЗ low_position_count = 2 — это работает только если порог нестрогий (>= 3).
+WITH car_stats AS (
+    SELECT c.name              AS car_name,
+           c.class             AS car_class,
+           AVG(r.position)     AS average_position,
+           COUNT(*)            AS race_count
+    FROM Cars c
+    INNER JOIN Results r ON r.car = c.name
+    GROUP BY c.name, c.class
+),
+class_stats AS (
+    SELECT cs.car_class,
+           SUM(cs.race_count)                                   AS total_races,
+           COUNT(*) FILTER (WHERE cs.average_position > 3.0)    AS low_position_count
+    FROM car_stats cs
+    GROUP BY cs.car_class
+)
+SELECT cs.car_name,
+       cs.car_class,
+       cs.average_position,
+       cs.race_count,
+       cl.country               AS car_country,
+       clss.total_races,
+       clss.low_position_count
+FROM car_stats cs
+INNER JOIN class_stats clss ON clss.car_class = cs.car_class
+INNER JOIN Classes      cl  ON cl.class       = cs.car_class
+WHERE cs.average_position > 3.0
+ORDER BY clss.low_position_count DESC, cs.car_name;
